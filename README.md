@@ -15,4 +15,4 @@ The basic format is as follows:
 1 8 28 56 70 56 28 8 1
 ```
 
-The script was written using C#. Feel free to [open issues](./issues) and [pull requests](./pull).
+The script was written using C#. Feel free to [open issues](//github.com/bored-user/PascalsTriangle/issues) and [pull requests](//github.com/bored-user/PascalsTriangle/pulls).
