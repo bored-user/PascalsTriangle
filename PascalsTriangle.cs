@@ -30,15 +30,33 @@ namespace PascalsTriangle
                        1 5 10 10 5 1
                       1 6 15 20 15 6 1
                     1 7 21 35 35 21 7 1
-                    
-                    numberOfSpaces = 
+
+                            1
+                           1 1
+                          1 2 1
+                         1 3 3 1
+                        1 4 6 4 1
             */
         }
 
         private int Padding(int row)
         {
-            
-            return 0;
+            // int[] lastRow = new int[this._rows],
+            //     currentRow = new int[this._rows];
+            // int biggestNumberGlobal,
+            //     biggestNumberOfCurrentRow;
+            // Func<int, int> order = n => n.ToString().Length;
+
+            // for (int col = 0; col < this._rows; col++)
+            // {
+            //     lastRow[col] = this._triangle[this._rows - 1, col];
+            //     currentRow[col] = this._triangle[row, col];
+            // }
+
+            // biggestNumberGlobal = lastRow.AsEnumerable<int>().OrderBy(order).Last().ToString().Length;
+            // biggestNumberOfCurrentRow = currentRow.AsEnumerable<int>().OrderBy(order).Last().ToString().Length;
+
+            return (this._rows - row + 1);
         }
 
         public override string ToString()
@@ -47,11 +65,10 @@ namespace PascalsTriangle
 
             for (int row = 0; row < this._rows; row++)
             {
-                res += "".PadLeft(this.Padding(row),' ');
-
+                res += "".PadLeft(this.Padding(row), ' ');
                 for (int col = 0; col < this._rows; col++)
-                    if (this._triangle[row, col] == 0) continue; else res += $"{this._triangle[row, col]} ";
-
+                    if (this._triangle[row, col] == 0) continue;
+                    else res += $"{this._triangle[row, col]} ";
                 res += "\n";
             }
 
