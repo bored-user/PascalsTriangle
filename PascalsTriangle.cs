@@ -4,14 +4,18 @@ using System;
 
 namespace PascalsTriangle
 {
-    public class PascalsTriangle
+    public class PascalTriangle
     {
         private int[,] _triangle;
-        private Dictionary<string, int> _style = new Dictionary<string, int>() { ["identation"] = 1 };
-        public int _rows;
+        private int _rows;
+        private bool _easterEgg;
 
-        public PascalsTriangle(int rows)
+        public PascalTriangle(int rows, bool easterEgg = false)
         {
+            if (rows == 0) throw new NotSupportedException(EasterEgg());
+            else if (rows < 1) throw new FormatException("Row number must be greater or equal to one");
+
+            this._easterEgg = easterEgg;
             this._rows = rows;
             this._triangle = new int[rows, rows];
             this._triangle[0, 0] = 1;
@@ -19,58 +23,57 @@ namespace PascalsTriangle
             for (int row = 1; row < rows; row++)
                 for (int col = 0; col < rows; col++)
                     this._triangle[row, col] = this._triangle[row - 1, col] + (col - 1 < 0 || col + 1 > rows ? 0 : this._triangle[row - 1, col - 1]);
-
-
-            /*
-                             1
-                            1 1
-                           1 2 1
-                          1 3 3 1
-                         1 4 6 4 1
-                       1 5 10 10 5 1
-                      1 6 15 20 15 6 1
-                    1 7 21 35 35 21 7 1
-
-                            1
-                           1 1
-                          1 2 1
-                         1 3 3 1
-                        1 4 6 4 1
-            */
         }
 
-        private int Padding(int row)
+        static string EasterEgg()
         {
-            // int[] lastRow = new int[this._rows],
-            //     currentRow = new int[this._rows];
-            // int biggestNumberGlobal,
-            //     biggestNumberOfCurrentRow;
-            // Func<int, int> order = n => n.ToString().Length;
+            PascalTriangle pt1 = new PascalTriangle(20),
+                pt2 = new PascalTriangle(20, true);
 
-            // for (int col = 0; col < this._rows; col++)
-            // {
-            //     lastRow[col] = this._triangle[this._rows - 1, col];
-            //     currentRow[col] = this._triangle[row, col];
-            // }
-
-            // biggestNumberGlobal = lastRow.AsEnumerable<int>().OrderBy(order).Last().ToString().Length;
-            // biggestNumberOfCurrentRow = currentRow.AsEnumerable<int>().OrderBy(order).Last().ToString().Length;
-
-            return (this._rows - row + 1);
+            return $"{pt1.ToString()}\n{pt2.ToString()}";
         }
 
         public override string ToString()
         {
             string res = "";
+            int lastRowLength = GetRowLength(this._rows - 1),
+                lastCurrRowDiff,
+                halfDiff;
+            bool isEven;
 
-            for (int row = 0; row < this._rows; row++)
+            int GetRowLength(int row)
             {
-                res += "".PadLeft(this.Padding(row), ' ');
+                if (this._rows < row) return 0;
+                var len = new List<int>();
+
                 for (int col = 0; col < this._rows; col++)
-                    if (this._triangle[row, col] == 0) continue;
-                    else res += $"{this._triangle[row, col]} ";
-                res += "\n";
+                    if (this._triangle[row, col] != 0)
+                        len.Add(this._triangle[row, col]);
+
+                return string.Join(' ', len.ToArray()).Length;
             }
+
+            string ForLoopWrapper(int row)
+            {
+                lastCurrRowDiff = lastRowLength - GetRowLength(row);
+                isEven = lastCurrRowDiff % 2 == 0;
+                halfDiff = lastCurrRowDiff / 2;
+
+                res += "".PadLeft(isEven ? halfDiff : (int)((lastCurrRowDiff - 1) / 2), ' ');
+
+                for (int col = 0; col < this._rows; col++)
+                    if (this._triangle[row, col] != 0) res += $"{this._triangle[row, col]} ";
+
+                return $"{res.Substring(0, res.Length - 1)}{"".PadLeft(isEven ? halfDiff : (int)((lastCurrRowDiff + 1.5) / 2), ' ')}\n";
+            }
+
+
+            if (!this._easterEgg)
+                for (int row = 0; row < this._rows; row++)
+                    res = ForLoopWrapper(row);
+            else
+                for (int row = this._rows - 1; row >= 0; row--)
+                    res = ForLoopWrapper(row);
 
             return res.Substring(0, res.Length - 1);
         }

@@ -8,7 +8,12 @@ namespace PascalsTriangle
         {
             try
             {
-                Console.WriteLine($"\n{new PascalsTriangle(GetUserInput())}");
+                Console.WriteLine($"\n{new PascalTriangle(GetUserInput())}");
+            }
+            catch (NotSupportedException exc)
+            {
+                Console.Clear();
+                Console.WriteLine($"\nCongrats, you found an Easter Egg!\n\n{exc.Message}");
             }
             catch (Exception exc)
             {
